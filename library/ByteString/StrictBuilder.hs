@@ -1,6 +1,7 @@
 module ByteString.StrictBuilder
   ( Builder,
     builderBytes,
+    builderCString,
     builderChunksBuilder,
     builderLength,
     builderPtrFiller,
@@ -79,6 +80,9 @@ instance Show Builder where
 builderBytes :: Builder -> ByteString
 builderBytes (Builder size population) =
   C.unsafeCreate size $ \ptr -> A.populationPtrUpdate population ptr $> ()
+
+builderCString :: Builder -> ByteString
+builderCString b = builderBytes $ b <> byte 0
 
 -- |
 -- Converts into the standard lazy bytestring builder.
